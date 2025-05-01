@@ -1,3 +1,6 @@
+import Logo from './components/Logo'
+import { UseCincopaInput } from './components/UseCincopaInput'
+
 const cincopaAsset = {
     name: 'cincopa.asset',
     type: 'document',
@@ -70,10 +73,32 @@ const cincopaAsset = {
         ]
       }
     ],
-  }
+}
+
+const useCincopaSchema = {
+  name: 'useCincopa',
+  title: 'Cincopa',
+  icon: Logo,
+  type: 'object',
+  components: {
+    input: UseCincopaInput
+  },
+  fields: [{
+      name: 'url',
+      type: 'url',
+      title: 'Cincopa Asset URL'
+    },
+    {
+      name: 'title',
+      type: 'string',
+      title: 'Title'
+    }
+  ]
+}
 
 export const schemaTypes = [
     cincopaAsset,
+    useCincopaSchema
 ]
 
 export const uploadFileSchema = {

@@ -3,9 +3,7 @@ import {schemaTypes} from './schema'
 import {cincopaAssetRendering} from './plugin'
 import {uploadFileSchema} from './schema'
 
-const defaultConfig = {
-  fullCincopaSync:false,
-};
+const defaultConfig = {};
 
 export const cincopaUploader = definePlugin((userConfig = {}) => {
   const config = { ...defaultConfig, ...userConfig };

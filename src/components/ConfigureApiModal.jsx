@@ -7,7 +7,6 @@ import { saveSecrets } from '../hooks/saveSecrets'
 import { secretsFormState } from '../hooks/secretsFormState'
 
 function ConfigureApiModal({ secrets, setDialogState }) {
-    
     const saving = useRef(false);
     const client = useClient();
     const focusToField = useRef(null);
