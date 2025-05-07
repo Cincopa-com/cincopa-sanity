@@ -69,6 +69,26 @@ export const cincopaAsset = defineType({
 
 ---
 
+## 🧩 Optional: Use Cincopa Assets in the Portable Text Editor
+
+This enables editors to insert and manage Cincopa assets inline within Portable Text editors.
+
+```ts
+  import { defineField } from 'sanity'
+
+  defineField({
+    name: 'body',
+    type: 'array',
+    of: [
+      { type: 'block' },
+      { type: 'useCincopa' }
+    ]
+  })
+
+```
+
+---
+
 ## 🧪 Develop & Test
 
 This plugin uses [@sanity/plugin-kit](https://github.com/sanity-io/plugin-kit) for development tooling.
