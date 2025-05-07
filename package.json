@@ -1,6 +1,6 @@
 {
   "name": "sanity-plugin-cincopa-uploader",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "keywords": [
     "sanity",
@@ -25,7 +25,7 @@
   "type": "commonjs",
   "exports": {
     ".": {
-      "source": "./src/index.ts",
+      "source": "./src/index.js",
       "import": "./dist/index.mjs",
       "default": "./dist/index.js"
     },
@@ -39,8 +39,9 @@
     "src",
     "v2-incompatible.js"
   ],
+  "browserslist": "extends @sanity/browserslist-config",
   "scripts": {
-    "build": "plugin-kit verify-package --silent && pkg-utils build --strict --check --clean",
+    "build": "rm -rf dist && mkdir dist && cp src/index.js src/index.d.ts dist/",
     "format": "prettier --write --cache --ignore-unknown .",
     "link-watch": "plugin-kit link-watch",
     "lint": "eslint .",
