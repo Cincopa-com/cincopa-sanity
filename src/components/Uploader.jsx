@@ -93,7 +93,7 @@ function Uploader(props) {
         const newAsset = {
             _type: 'cincopa.asset',
             assetRid: asset?.rid,
-            assetType: getMimeCategory(data?.type || data?.file?.type),
+            assetType: getMimeCategory(asset?.type || asset?.file?.type),
             assetTitle: 'Example title',
             assetDescription: 'Example description',
             assetReferenceId: 'sanity',
