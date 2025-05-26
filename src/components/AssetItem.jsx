@@ -1,17 +1,19 @@
 import React, { useCallback } from 'react';
 import { Card, Stack, Heading, Box, Button, Flex } from '@sanity/ui'
 import { AddIcon, EditIcon, PlayIcon } from '@sanity/icons'
-import { PatchEvent, set, setIfMissing, unset } from 'sanity'
+import { PatchEvent, set, setIfMissing, useFormValue } from 'sanity'
 import { useClient } from '../hooks/useClient'
 
-export default function AssetItem({ secrets, asset, setDialogState, onChange, selectedAsset }) {
+export default function AssetItem({ config, hasUploaderAccess, asset, setDialogState, onChange, selectedAsset }) {
     const client = useClient();
+    const documentId = useFormValue(['_id']);
     const assetDate = new Date(asset?.uploaded);
     const formattedDate = assetDate.toISOString().split('T')[0].replaceAll('-','/');
     const thumbnailUrl = asset?.thumbnail?.url || 'https://wwwcdn.cincopa.com/_cms/design15/images/nothumb.png';
+    const accessToken = hasUploaderAccess ? config?.token : null;
 
     const handleAssetClick = (rid) => {
-        if(!secrets?.token) return;
+        if(!accessToken) return;
 
         let editor = {
             load_modules: [
@@ -76,7 +78,7 @@ export default function AssetItem({ secrets, asset, setDialogState, onChange, se
                   order: 16
                 },
               ],
-        token: secrets?.token,
+        token: accessToken,
         rid,
         editorV2: true,
         }
@@ -86,43 +88,52 @@ export default function AssetItem({ secrets, asset, setDialogState, onChange, se
 
     const handleAddAsset = useCallback(
         (asset) => {
-            if (asset?.rid !== selectedAsset?._ref) {
+            if (asset?.rid !== selectedAsset?._ref && documentId) {
                 onChange(
                     PatchEvent.from([
                     setIfMissing({asset: {}, _type: 'cincopa.uploader'}),
                     set({_type: asset?.type, _weak: true, _ref: asset?.rid}, ['asset']),
                     ])
                 )
-                createDocument(asset);
+                updateDocument(asset);
             }
             setDialogState(false);
         }
     )
 
-    const createDocument = async (asset) => {
-        const newAsset = {
-            _type: 'cincopa.asset',
-            assetRid: asset?.rid,
-            assetType: asset?.type,
-            assetTitle: asset.caption || asset?.filename || '',
-            assetDescription: asset?.description || '',
-            assetNotes: asset?.long_description,
-            assetRelatedLinkText: asset?.related_link_text,
-            assetRelatedLinkUrl: asset?.related_link_url,
-            assetUploaded: asset?.modified,
-            assetReferenceId: asset?.reference_id,
-        }
-        
-        try {
-            const result = await client.create(newAsset);
-        } catch (error) {
-            console.error('Document creation failed:', error)
-        }
+    const updateDocument = async (asset) => {
+      const baseId = typeof documentId === 'string' ? documentId.replace(/^drafts\./, '') : null;
+      if (!baseId) {
+        console.warn('Document ID not available yet');
+        return;
+      }
+
+      const draftId = `drafts.${baseId}`;
+
+      const assetData = {
+        _id: draftId,
+        _type: 'cincopa.asset',
+        assetRid: asset?.rid,
+        assetType: asset?.type,
+        assetTitle: asset.caption || asset?.filename || '',
+        assetDescription: asset?.description || '',
+        assetNotes: asset?.long_description,
+        assetRelatedLinkText: asset?.related_link_text,
+        assetRelatedLinkUrl: asset?.related_link_url,
+        assetUploaded: asset?.modified,
+        assetReferenceId: asset?.reference_id,
+      }
+
+      try {
+        await client.patch(draftId).setIfMissing({ _type: assetData._type }).set(assetData).commit();
+      } catch (error) {
+        console.error('Failed to update document:', error);
+      }
     };
 
   return (
     <>
-        <Card 
+        <Card
             border
             padding={2}
             margin={2}
@@ -134,37 +145,37 @@ export default function AssetItem({ secrets, asset, setDialogState, onChange, se
                 space={3}
                 height="fill"
             >
-                <Box 
-                    style={{ 
+                <Box
+                    style={{
                         position: 'relative',
-                        backgroundImage: `url(${thumbnailUrl})`, 
+                        backgroundImage: `url(${thumbnailUrl})`,
                         backgroundPosition: 'center',
-                        backgroundSize: 'cover', 
-                        height: '160px' 
+                        backgroundSize: 'cover',
+                        height: '160px'
                     }}>
                     {asset?.type === 'video' && (
-                        <PlayIcon 
+                        <PlayIcon
                             style={{
                                 position: 'absolute',
                                 color: '#fff',
                                 top: 'calc(50% - 20px)',
                                 left: 'calc(50% - 20px)',
                                 fontSize: '40px',
-                            }}      
+                            }}
                         />
                     )}
                 </Box>
-                <Flex 
-                    direction={'column'} 
+                <Flex
+                    direction={'column'}
                     justify={'center'}
                     style={{
                         width: '100%',
                         gap: '20px'
                     }}
                 >
-                    <Heading 
-                        as="h4" 
-                        size={0} 
+                    <Heading
+                        as="h4"
+                        size={0}
                         style={{
                             padding: '10px 0',
                             wordBreak: 'break-word',
@@ -175,8 +186,8 @@ export default function AssetItem({ secrets, asset, setDialogState, onChange, se
                             fontSize: '12px',
                         }}
                     ><span style={{fontWeight: '600'}}>Uploaded:</span> {formattedDate}</Box>
-                    <Flex 
-                        align={'center'} 
+                    <Flex
+                        align={'center'}
                         justify={'space-between'}
                         wrap={'wrap'}
                         style={{
@@ -193,16 +204,20 @@ export default function AssetItem({ secrets, asset, setDialogState, onChange, se
                             style={{flex: 1}}
                             onClick={() => handleAddAsset(asset)}
                         />
-                        <Button
-                            icon={EditIcon}
-                            fontSize={1}
-                            padding={[2, 2, 3]}
-                            radius="full"
-                            mode="caution"
-                            text="Edit Asset"
-                            style={{flex: 1, background: '#0086cf'}}
-                            onClick={() => handleAssetClick(asset.rid)}
-                        />
+                        <>
+                          {hasUploaderAccess && (
+                            <Button
+                                icon={EditIcon}
+                                fontSize={1}
+                                padding={[2, 2, 3]}
+                                radius="full"
+                                mode="caution"
+                                text="Edit Asset"
+                                style={{flex: 1, background: '#0086cf'}}
+                                onClick={() => handleAssetClick(asset.rid)}
+                            />
+                          )}
+                        </>
                     </Flex>
                 </Flex>
             </Stack>

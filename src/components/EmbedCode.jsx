@@ -1,93 +1,78 @@
 import { Box } from '@sanity/ui'
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
-function EmbedCode({asset}) {
-    const [templateId, handleTemplateId] = useState('A4HAcLOLOO68');
+function EmbedCode({ asset }) {
+    const [templateId, setTemplateId] = useState('A4HAcLOLOO68');
+    const containerRef = useRef(null);
 
     useEffect(() => {
         if (asset) {
             switch (asset._type) {
                 case 'video':
-                    handleTemplateId('A4HAcLOLOO68');
+                    setTemplateId('A4HAcLOLOO68');
                     break;
                 case 'image':
-                    handleTemplateId('A8AAFV8a-H5b');
+                    setTemplateId('A8AAFV8a-H5b');
                     break;
                 case 'music':
-                    handleTemplateId('AEFALSr3trK4');
+                    setTemplateId('AEFALSr3trK4');
                     break;
                 case 'unknown':
-                    handleTemplateId('AYFACCtYYllw');
+                    setTemplateId('AYFACCtYYllw');
                     break;
                 default:
-                    handleTemplateId('A4HAcLOLOO68');
+                    setTemplateId('A4HAcLOLOO68');
             }
         }
     }, [asset]);
 
     useEffect(() => {
-        const loadScripts = async () => {
-            try {
-                await loadScript('//rtcdn.cincopa.com/meta_json.aspx?fid=' + templateId + '!' + asset?._ref + '&ver=v2&id=cincopa_' + templateId + asset?._ref);
+        if (!asset?._ref) return;
 
-                // Load the second script after the first one finishes
-                await loadScript('//rtcdn.cincopa.com/libasync.js');
+        const embedId = `cincopa_${templateId}${asset._ref}`;
 
-            } catch (error) {
-                console.error("Error loading scripts:", error);
+        if (window._cincopa && typeof window._cincopa._async !== 'undefined') {
+            window._cincopa._async = [];
+        }
+
+        if (containerRef.current) {
+            containerRef.current.innerHTML = '';
+        }
+
+        const script = document.createElement('script');
+        script.src = `//rtcdn.cincopa.com/meta_json.aspx?fid=${templateId}!${asset._ref}&ver=v2&id=${embedId}`;
+        script.async = true;
+        script.onload = () => {
+            const asyncScript = document.createElement('script');
+            asyncScript.src = '//rtcdn.cincopa.com/libasync.js';
+            asyncScript.async = true;
+            document.body.appendChild(asyncScript);
+        };
+        script.onerror = (err) => console.error(`Error loading embed script: ${err.message}`);
+
+        document.body.appendChild(script);
+
+        return () => {
+            if (containerRef.current) {
+                containerRef.current.innerHTML = '';
             }
         };
-
-        loadScripts();
-    }, [asset]); 
-    
-    const loadScript = (src) => {
-        return new Promise((resolve, reject) => {
-        const script = document.createElement("script");
-        script.src = src;
-        script.async = true;
-        script.onload = () => resolve();
-        script.onerror = (err) => reject(new Error(`Script load error: ${src}`));
-        document.body.appendChild(script);
-        });
-    };
+    }, [asset, templateId]);
 
     return (
-        <>
-            <Box>
-                <div 
-                    className='gallerydemo cincopa-fadein'
-                    id={`cincopa_${templateId}${asset?._ref}`} 
-                    style={{
-                        maxWidth: '100%',
-                        width: '100%',
-                        height: 'auto',
-                    }}
-                >
-                    <div style={{
-                            display: 'flex',
-                            maxWidth: '100%',
-                            width: '100%',
-                            height: 'auto',
-                        }}
-                    >
-                        <img 
-                            src={`https://rtcdn.cincopa.com/thumb.aspx?fid=${templateId}!${asset?._ref}&size=large`}
-                            alt='Thumbnail'
-                            style={{
-                                filter: 'blur(5px)',
-                                objectFit: 'contain',
-                                width: '100%',
-                                aspectRatio: '1.90',
-                                padding: 0,
-                                margin: 0,
-                            }}
-                        />
-                    </div>
-                </div>
-            </Box>
-        </>  
-    )
+      <Box>
+        <div
+          ref={containerRef}
+          id={`cincopa_${templateId}${asset?._ref}`}
+          className='gallerydemo cincopa-fadein'
+          style={{
+              maxWidth: '100%',
+              width: '100%',
+              height: 'auto',
+          }}
+        />
+      </Box>
+    );
 }
 
-export default EmbedCode
+export default EmbedCode;

@@ -1,4 +1,4 @@
-import {definePlugin} from 'sanity'
+import { definePlugin } from 'sanity'
 import {schemaTypes} from './schema'
 import {cincopaAssetRendering} from './plugin'
 import {uploadFileSchema} from './schema'

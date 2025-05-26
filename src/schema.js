@@ -7,6 +7,11 @@ const cincopaAsset = {
     title: 'Cincopa Asset',
     fields: [
       {
+        title: 'Cincopa Asset Uploader',
+        name: 'cincopaUploaded',
+        type: 'cincopa.uploader',
+      },
+      {
         title: 'Asset Title',
         type: 'string',
         name: 'assetTitle',
@@ -58,7 +63,7 @@ const cincopaAsset = {
       },
       {
         title: 'Asset Uploaded',
-        type: 'date',
+        type: 'datetime',
         name: 'assetUploaded',
       },
       {
@@ -68,16 +73,16 @@ const cincopaAsset = {
         of: [
           {
             type: 'reference',
-            to: [{ type: 'cincopaAsset' }],
+            to: [{ type: 'cincopa.asset' }],
           },
         ]
       }
     ],
 }
 
-const useCincopaSchema = {
-  name: 'useCincopa',
-  title: 'Cincopa',
+const cincopaAssetSchema = {
+  name: 'cincopa_asset',
+  title: 'Cincopa Asset',
   icon: Logo,
   type: 'object',
   components: {
@@ -98,7 +103,7 @@ const useCincopaSchema = {
 
 export const schemaTypes = [
     cincopaAsset,
-    useCincopaSchema
+    cincopaAssetSchema
 ]
 
 export const uploadFileSchema = {

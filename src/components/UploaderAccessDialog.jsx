@@ -1,12 +1,7 @@
-import { Button, Card, Flex, Grid, Heading, Inline } from '@sanity/ui'
+import { Card, Flex, Grid, Text, Heading, Inline } from '@sanity/ui'
 import CincopaLogo from './CincopaLogo'
 
-export default function UploaderAccessDialog({ setDialogState }) {
-
-  const handleOpen = () => {
-    setDialogState('secrets');
-  }
-
+export default function UploaderAccessDialog() {
   return (
     <>
       <div style={{padding: 2}}>
@@ -29,11 +24,11 @@ export default function UploaderAccessDialog({ setDialogState }) {
             <Grid columns={1} gap={[2, 3, 4, 4]}>
               <Inline paddingY={1} align="center">
                 <Heading size={[0, 1, 2, 2]} style={{color: '#0086cf'}}>
-                  Upload access requires a valid token. Please provide one to proceed.
+                  Upload Not Available
                 </Heading>
               </Inline>
               <Inline paddingY={1} align="center">
-                <Button mode="ghost" text="Configure API Token" onClick={handleOpen}/>
+                <Text size={2}>A required API token is missing. Please contact your administrator or add the Cincopa token to your environment configuration.</Text>
               </Inline>
             </Grid>
           </Flex>

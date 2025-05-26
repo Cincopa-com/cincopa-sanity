@@ -1,8 +1,8 @@
-import { Card, Flex, Box, Label, Button, Popover, Menu, MenuItem, MenuDivider, useClickOutsideEvent } from '@sanity/ui'
-import {WrenchIcon, SearchIcon, EllipsisVerticalIcon, ResetIcon, UploadIcon} from '@sanity/icons'
+import { Card, Flex, Grid, Inline, Box, Heading, Text, Label, Button, Popover, Menu, MenuItem, MenuDivider, useClickOutsideEvent } from '@sanity/ui'
+import {SearchIcon, EllipsisVerticalIcon, ResetIcon, UploadIcon} from '@sanity/icons'
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { useClient } from '../hooks/useClient'
-import {PatchEvent, set, unset, setIfMissing} from 'sanity'
+import {PatchEvent, set, unset, setIfMissing, useFormValue,  } from 'sanity'
 import CincopaLogo from './CincopaLogo'
 import { apiGetUploadUrl, apiAssetSetMeta } from '../constants/ApiUrls'
 import AssetsListModal from '../components/AssetsListModal'
@@ -10,6 +10,7 @@ import EmbedCode from '../components/EmbedCode'
 
 function Uploader(props) {
     const client = useClient();
+    const documentId = useFormValue(['_id']);
     const uploaderRef = useRef(null);
     const hasInitialized = useRef(false);
     const [openMenu, setOpenMenu] = useState(false);
@@ -17,18 +18,18 @@ function Uploader(props) {
     const [uploadUrl, setUploadUrl] = useState(null);
     const [uploadState, handleUploadState] = useState(false);
     const handleAssetList = useCallback(() => props?.setDialogState('select-video'), [props?.setDialogState]);
-    const handleConfigureApi = useCallback(() => props?.setDialogState('secrets'), [props?.setDialogState]);
     const onReset = useCallback(() => props?.onChange(PatchEvent.from(unset([]))), [props?.onChange]);
-    
+    const accessToken = props?.hasUploaderAccess ? props?.config?.token : props?.config?.token_viewer;
+
     useEffect(() => {
-        if(props?.secrets?.token){
+        if(accessToken && props?.hasUploaderAccess){
           getUploadUrl();
         }
-    }, [props?.secrets?.token]);
+    }, [accessToken]);
 
     const getUploadUrl = async() => {
         try {
-            const response = await fetch(`${apiGetUploadUrl}?api_token=${props?.secrets.token}`);
+            const response = await fetch(`${apiGetUploadUrl}?api_token=${accessToken}`);
             if (!response.ok) throw new Error('Failed to fetch data');
             const result = await response.json();
             setUploadUrl(result?.upload_url);
@@ -53,15 +54,16 @@ function Uploader(props) {
                     width: 'auto',
                     height: 'auto',
                     onUploadComplete: function (data) {
-                        if (data.uploadState === 'Complete') {
-                            props?.secrets?.token && data?.rid && setMeta(data?.rid);
+                        if (data.uploadState === 'Complete' && documentId) {
+                            accessToken && data?.rid && setMeta(data?.rid);
                             props.onChange(
                                 PatchEvent.from([
                                   setIfMissing({asset: {}, _type: 'cincopa.uploader'}),
                                   set({_type: getMimeCategory(data?.type || data?.file?.type), _weak: true, _ref: data?.rid}, ['asset']),
                                 ])
                             )
-                            createDocument(data);
+                            updateDocument(data);
+                            handleUploadState(false);
                         }
                     },
                 });
@@ -78,35 +80,45 @@ function Uploader(props) {
 
     const setMeta = async(rid) =>{
         try {
-          const response = await fetch(`${apiAssetSetMeta}?api_token=${props?.secrets?.token}&rid=${rid}&reference_id=sanity`);
+          const response = await fetch(`${apiAssetSetMeta}?api_token=${accessToken}&rid=${rid}&reference_id=sanity`);
           if (!response.ok) {
             throw new Error('Failed to fetch data');
           }
-    
+
           const result = await response.json();
         } catch (err) {
           console.log(err, 'Error: Asset Set Meta Data');
         }
     };
 
-    const createDocument = async (asset) => {
-        const newAsset = {
-            _type: 'cincopa.asset',
-            assetRid: asset?.rid,
-            assetType: getMimeCategory(asset?.type || asset?.file?.type),
-            assetTitle: 'Example title',
-            assetDescription: 'Example description',
-            assetReferenceId: 'sanity',
-            assetUploaded: new Date().toISOString(),
-        }
-        
-        try {
-            const result = await client.create(newAsset)
-        } catch (error) {
-            console.error('Document creation failed:', error)
-        }
+    const updateDocument = async (asset) => {
+      const baseId = typeof documentId === 'string' ? documentId.replace(/^drafts\./, '') : null;
+      if (!baseId) {
+        console.warn('Document ID not available yet');
+        return;
+      }
+
+      const draftId = `drafts.${baseId}`;
+
+      const assetData = {
+        _id: draftId,
+        _type: 'cincopa.asset',
+        assetRid: asset?.rid,
+        assetType: getMimeCategory(asset?.type || asset?.file?.type),
+        assetTitle: 'Example Title',
+        assetDescription: '',
+        assetReferenceId: 'sanity',
+        assetUploaded: new Date().toISOString(),
+      }
+
+      try {
+        await client.createIfNotExists({ _id: draftId, _type: assetData._type });
+        await client.patch(draftId).set(assetData).commit();
+      } catch (error) {
+          console.error('Failed to update document:', error);
+      }
     };
-    
+
     const getMimeCategory = (mimeType) => {
         if (typeof mimeType !== 'string') return 'unknown';
         const [type] = mimeType.toLowerCase().split('/');
@@ -134,12 +146,12 @@ function Uploader(props) {
     return(
         <>
         <Card>
-            <Flex 
-                padding={2} align='center' 
-                justify='space-between' 
-                style={{ 
-                    backgroundColor: '#f5f5f5', 
-                    borderRadius: '10px' 
+            <Flex
+                padding={2} align='center'
+                justify='space-between'
+                style={{
+                    backgroundColor: '#f5f5f5',
+                    borderRadius: '10px'
                 }}>
                 <CincopaLogo height={30} />
                 <Flex align='center' gap={1}>
@@ -152,15 +164,6 @@ function Uploader(props) {
                         title="Search Asset"
                         onClick={handleAssetList}
                     />
-                    <Button
-                        padding={2}
-                        radius={3}
-                        fontSize={3}
-                        onClick={handleConfigureApi}
-                        icon={WrenchIcon}
-                        mode="bleed"
-                        title="Configure plugin credentials"
-                    />
                     {props?.value?.asset && !uploadState && (
                     <Box>
                         <Popover padding={3}
@@ -170,11 +173,15 @@ function Uploader(props) {
                                         Asset Settings
                                     </Label>
                                     <MenuDivider />
-                                    <MenuItem
-                                        icon={UploadIcon}
-                                        text="Upload"
-                                        onClick={() => handleUploadState(true)}
-                                    />
+                                    <>
+                                      {props?.hasUploaderAccess && (
+                                        <MenuItem
+                                            icon={UploadIcon}
+                                            text="Upload"
+                                            onClick={() => handleUploadState(true)}
+                                        />
+                                      )}
+                                    </>
                                     <MenuItem
                                         tone="critical"
                                         icon={ResetIcon}
@@ -201,26 +208,45 @@ function Uploader(props) {
                 </Flex>
             </Flex>
             <Box
-                style={{ 
-                    backgroundColor: '#f5f5f5', 
-                    padding: '20px', 
-                    borderRadius: '10px', 
-                    marginTop: "5px" 
+                style={{
+                    backgroundColor: '#f5f5f5',
+                    padding: '20px',
+                    borderRadius: '10px',
+                    marginTop: "5px",
+                    minHeight: '300px',
                 }}>
                 {props?.value?.asset && !uploadState ? (
-                    <EmbedCode 
+                    <EmbedCode
                         asset={props.value.asset}
                         onChange={props.onChange}
                     />
                 ) : (
-                    <div ref={uploaderRef} ></div>
+                    <>
+                      {accessToken && props?.hasUploaderAccess ? (
+                        <div ref={uploaderRef} ></div>
+                        ) : (
+                        <Flex paddingY={5} justify="center">
+                          <Grid columns={1} gap={[2, 3, 4, 4]}>
+                            <Inline paddingY={1} align="center">
+                              <Heading size={[0, 1, 2, 2]} style={{color: '#0086cf'}}>
+                                Uploader restricted
+                              </Heading>
+                            </Inline>
+                            <Inline paddingY={1} align="center">
+                              <Text size={2}>You have the <code>viewer</code> role, which does not allow uploading assets.</Text>
+                            </Inline>
+                          </Grid>
+                        </Flex>
+                      )}
+                    </>
                 )}
             </Box>
         </Card>
 
         {props?.dialogState === 'select-video' && (
             <AssetsListModal
-                secrets={props?.secrets}
+                config={props?.config}
+                hasUploaderAccess={props?.hasUploaderAccess}
                 setDialogState={props?.setDialogState}
                 onChange={props.onChange}
                 selectedAsset={props?.value?.asset}

@@ -13,7 +13,8 @@ const StyledDialog = styled(Dialog)`
   }
 `;
 
-export default function AssetsListModal({secrets, setDialogState, onChange, selectedAsset }) {
+export default function AssetsListModal({config, hasUploaderAccess, setDialogState, onChange, selectedAsset }) {
+    console.log(hasUploaderAccess, 'hasUploaderAccess')
     const id = `AssetsListModal${useId()}`;
     const [data, setData] = useState(null);
     const [page, setPage] = useState(1);
@@ -30,23 +31,24 @@ export default function AssetsListModal({secrets, setDialogState, onChange, sele
     const [searchFieldDefault, setSearchFieldDefault] = useState(searchFields[0].value);
     const [filterTimer, setFilterTimer] = useState(null);
     const [isMoreAssets, handleMoreAssets] = useState(false);
+    const accessToken = hasUploaderAccess ? config?.token : config?.token_viewer;
 
     useEffect(() => {
-        if (secrets?.token) {
+        if (accessToken) {
             fetchData();
         }
-    }, [secrets?.token]);
+    }, [accessToken]);
 
     useEffect(() => {
         if (searchFieldDefault && searchValue != '') {
           handleLoading(true);
           getFilteredData();
         }
-    
+
         if (filterTimer) {
           clearTimeout(filterTimer);
         }
-    
+
       }, [searchFieldDefault, searchValue]);
 
     useEffect(() => {
@@ -64,8 +66,8 @@ export default function AssetsListModal({secrets, setDialogState, onChange, sele
         };
 
         loadScripts();
-    }, []); 
-    
+    }, []);
+
     const loadScript = (src) => {
         return new Promise((resolve, reject) => {
         const script = document.createElement("script");
@@ -80,7 +82,7 @@ export default function AssetsListModal({secrets, setDialogState, onChange, sele
     const fetchData = async (firstPage) => {
         try {
             const currentPage = firstPage ? firstPage : page;
-            const response = await fetch(`${apiAssetList}?api_token=${secrets.token}&items_per_page=50&page=${currentPage}`);
+            const response = await fetch(`${apiAssetList}?api_token=${accessToken}&items_per_page=50&page=${currentPage}`);
 
             if (!response.ok) {
                 throw new Error('Failed to fetch data');
@@ -119,9 +121,9 @@ export default function AssetsListModal({secrets, setDialogState, onChange, sele
           clearTimeout(filterTimer);
         }
         if (!searchValue) return;
-    
+
         const newFilterTimer = setTimeout(async () => {
-          let url = `${apiAssetList}?api_token=${secrets.token}`;
+          let url = `${apiAssetList}?api_token=${accessToken}`;
           if(searchFieldDefault == 'by_asset_id') {
             url += `&rid=${searchValue}`;
           }else if(searchFieldDefault == 'by_title') {
@@ -131,14 +133,14 @@ export default function AssetsListModal({secrets, setDialogState, onChange, sele
           }else{
             return;
           }
-    
+
           try {
             const response = await fetch(url);
-    
+
             if (!response.ok) {
               throw new Error('Failed to fetch data');
             }
-    
+
             const filteredResult = await response.json();
             setData(filteredResult);
             handleLoading(false);
@@ -163,7 +165,7 @@ export default function AssetsListModal({secrets, setDialogState, onChange, sele
         handleLoading(true);
         fetchData();
     }
-  
+
   return (
     <StyledDialog
       __unstable_autoFocus
@@ -176,9 +178,9 @@ export default function AssetsListModal({secrets, setDialogState, onChange, sele
             <Loader/>
         ) : (
             <>
-             <Flex 
-                padding={4} 
-                wrap={'nowrap'} 
+             <Flex
+                padding={4}
+                wrap={'nowrap'}
                 justify={'flex-start'}
                 gap={4}
             >
@@ -209,13 +211,14 @@ export default function AssetsListModal({secrets, setDialogState, onChange, sele
                     data.items.map((asset, index) => (
                         <Box key={asset?.rid} style={{width: '33.33333333%'}}>
                             <AssetItem
-                                secrets={secrets}
+                                config={config}
+                                hasUploaderAccess={hasUploaderAccess}
                                 asset={asset}
                                 setDialogState={setDialogState}
                                 onChange={onChange}
                                 selectedAsset={selectedAsset}
                             />
-                        </Box>                    
+                        </Box>
                     ))
                     ) : (
                     <p style={{ padding: '1rem' }}>No assets found.</p>
