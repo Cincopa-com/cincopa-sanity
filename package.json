@@ -11,13 +11,13 @@
     "cincopa",
     "cincopa-uploader"
   ],
-  "homepage": "https://github.com/davitHarut/cp-uploader-sanity#readme",
+  "homepage": "https://github.com/Cincopa-com/cincopa-sanity.git#readme",
   "bugs": {
-    "url": "https://github.com/davitHarut/cp-uploader-sanity/issues"
+    "url": "https://github.com/Cincopa-com/cincopa-sanity/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/davitHarut/cp-uploader-sanity.git"
+    "url": "git+ssh://git@github.com/Cincopa-com/cincopa-sanity.git"
   },
   "license": "MIT",
   "author": "Davit <davit@cincopa.com>",
