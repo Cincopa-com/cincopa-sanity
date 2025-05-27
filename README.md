@@ -81,7 +81,27 @@ This enables editors to insert and manage Cincopa assets inline within Portable 
     type: 'array',
     of: [
       { type: 'block' },
-      { type: 'useCincopa' }
+      { type: 'cincopa_asset' }
+    ]
+  })
+
+```
+
+---
+
+## 🧩 Optional: Use Sanity Cincopa Assets in the Portable Text Editor
+
+This enables editors to insert and manage Cincopa assets inline within Portable Text editors.
+
+```ts
+  import { defineField } from 'sanity'
+
+  defineField({
+    name: 'body',
+    type: 'array',
+    of: [
+      { type: 'block' },
+      { type: 'sanity_cincopa_asset' }
     ]
   })
 
