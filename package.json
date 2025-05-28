@@ -1,6 +1,6 @@
 {
   "name": "sanity-plugin-cincopa-uploader",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "",
   "keywords": [
     "sanity",
@@ -22,11 +22,11 @@
   "license": "MIT",
   "author": "Davit <davit@cincopa.com>",
   "sideEffects": false,
-  "type": "commonjs",
+  "type": "module",
   "exports": {
     ".": {
       "source": "./src/index.js",
-      "import": "./dist/index.mjs",
+      "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
     "./package.json": "./package.json"
