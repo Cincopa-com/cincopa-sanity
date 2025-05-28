@@ -18,7 +18,7 @@ This plugin allows editors to upload media files or link existing Cincopa assets
 ## 🛠 Installation
 
 ```bash
-npm install sanity-plugin-cincopa-uploader
+npm install sanity-plugin-cincopa-uploader@latest
 ```
 
 > This plugin is built for **Sanity Studio v3**.

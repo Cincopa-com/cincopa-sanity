@@ -1,7 +1,7 @@
 import { definePlugin } from 'sanity'
-import {schemaTypes} from './schema'
-import {cincopaAssetRendering} from './plugin'
-import {uploadFileSchema} from './schema'
+import {schemaTypes} from '../src/schema'
+import {cincopaAssetRendering} from '../src/plugin'
+import {uploadFileSchema} from '../src/schema'
 
 const defaultConfig = {};
 
