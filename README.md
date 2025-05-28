@@ -43,30 +43,6 @@ export default defineConfig({
 })
 ```
 
-### 2. Create a schema using the `cincopa.uploader` type:
-
-```ts
-import { defineType, defineField } from 'sanity'
-
-export const cincopaAsset = defineType({
-  name: 'cincopaAsset',
-  title: 'Cincopa Asset',
-  type: 'document',
-  fields: [
-    defineField({
-      name: 'title',
-      title: 'Asset Title',
-      type: 'string',
-    }),
-    defineField({
-      name: 'cincopaUploaded',
-      title: 'Cincopa Asset Uploader',
-      type: 'cincopa.uploader',
-    }),
-  ],
-})
-```
-
 ---
 
 ## 🧩 Optional: Use Cincopa Assets in the Portable Text Editor
