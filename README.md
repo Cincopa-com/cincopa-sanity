@@ -52,7 +52,7 @@ You can optionally extend the Cincopa Asset (cincopa.asset) document schema with
 ### 1. Create a file at:
 
 ```ts
-/schemas/assetCustomFields.js
+/schemaTypes/assetCustomFields.js
 
 ```
 

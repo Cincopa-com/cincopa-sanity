@@ -1,15 +1,12 @@
 import Logo from './components/Logo'
 import { UseCincopaInput } from './components/UseCincopaInput'
 
+// import { assetCustomFields } from '../schemaTypes/assetCustomFields.js'
+
 let customFieldDefs = []
-try {
-  const mod = await import('../../schemas/assetCustomFields.js')
-  if (mod?.assetCustomFields?.fields?.length > 0) {
-    customFieldDefs = mod.assetCustomFields.fields
-  }
-} catch (e) {
-  console.warn('No custom fields found or failed to load:', e)
-}
+// if (assetCustomFields?.fields?.length > 0) {
+//   customFieldDefs = assetCustomFields.fields;
+// }
 
 const cincopaAsset = {
     name: 'cincopa.asset',
