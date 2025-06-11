@@ -52,14 +52,14 @@ You can optionally extend the Cincopa Asset (cincopa.asset) document schema with
 ### 1. Create a file at:
 
 ```ts
-/schemaTypes/assetCustomFields.js
+/schemaTypes/cincopaAssetCustomFields.ts
 
 ```
 
 ### 2. Export an object like this:
 
 ```ts
-export const assetCustomFields = {
+export const cincopaAssetCustomFields = {
   fields: [
     {
       name: 'customField',

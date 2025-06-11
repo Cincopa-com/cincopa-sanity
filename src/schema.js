@@ -1,12 +1,11 @@
 import Logo from './components/Logo'
 import { UseCincopaInput } from './components/UseCincopaInput'
-
-// import { assetCustomFields } from '../schemaTypes/assetCustomFields.js'
+import { cincopaAssetCustomFields } from '../../../schemaTypes/cincopaAssetCustomFields'
 
 let customFieldDefs = []
-// if (assetCustomFields?.fields?.length > 0) {
-//   customFieldDefs = assetCustomFields.fields;
-// }
+if (cincopaAssetCustomFields?.fields?.length > 0) {
+  customFieldDefs = cincopaAssetCustomFields.fields;
+}
 
 const cincopaAsset = {
     name: 'cincopa.asset',
