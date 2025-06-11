@@ -45,6 +45,40 @@ export default defineConfig({
 
 ---
 
+## 🧱 Extending the Asset Schema
+
+You can optionally extend the Cincopa Asset (cincopa.asset) document schema with your own custom fields (e.g., tags, categories, or internal notes).
+
+### 1. Create a file at:
+
+```ts
+/schemas/assetCustomFields.js
+
+```
+
+### 2. Export an object like this:
+
+```ts
+export const assetCustomFields = {
+  fields: [
+    {
+      name: 'customField',
+      title: 'Custom Field',
+      type: 'string',
+    },
+    {
+      name: 'customFieldBoolean',
+      title: 'Custom Field Boolean',
+      type: 'boolean',
+    },
+  ]
+};
+
+
+```
+
+---
+
 ## 🧩 Optional: Use Cincopa Assets in the Portable Text Editor
 
 This enables editors to insert and manage Cincopa assets inline within Portable Text editors.
