@@ -74,6 +74,22 @@ export const cincopaAssetCustomFields = {
   ]
 };
 
+```
+
+### 3. Update your sanity.config.ts to include the Cincopa plugin with custom fields:
+
+```ts
+import { defineConfig } from 'sanity'
+import { cincopaUploader } from 'sanity-plugin-cincopa-uploader'
+import { cincopaAssetCustomFields } from './schemaTypes/cincopaAssetCustomFields'
+
+export default defineConfig({
+  plugins: [
+    cincopaUploader({
+      cincopaAssetCustomFields,
+    }),
+  ],
+})
 
 ```
 
@@ -141,4 +157,4 @@ Need help? Reach out to [support@cincopa.com](mailto:support@cincopa.com)
 
 ## 📄 License
 
-[MIT](LICENSE) © Davit
+[MIT](LICENSE)

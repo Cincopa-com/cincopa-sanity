@@ -1,6 +1,5 @@
 import Logo from './components/Logo'
 import { UseCincopaInput } from './components/UseCincopaInput'
-import { cincopaAssetCustomFields } from '../../../schemaTypes/cincopaAssetCustomFields'
 
 const cincopaAsset = {
     name: 'cincopa.asset',
@@ -77,8 +76,7 @@ const cincopaAsset = {
             to: [{ type: 'cincopa.asset' }],
           },
         ]
-      },
-      ...cincopaAssetCustomFields.fields,
+      }
     ],
 }
 

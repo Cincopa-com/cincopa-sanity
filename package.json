@@ -1,6 +1,6 @@
 {
   "name": "sanity-plugin-cincopa-uploader",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "",
   "keywords": [
     "sanity",
@@ -20,7 +20,7 @@
     "url": "git+ssh://git@github.com/Cincopa-com/cincopa-sanity.git"
   },
   "license": "MIT",
-  "author": "Davit <davit@cincopa.com>",
+  "author": "",
   "sideEffects": false,
   "type": "module",
   "exports": {
