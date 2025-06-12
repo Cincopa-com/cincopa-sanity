@@ -33,6 +33,21 @@ export function createSyncAssetData({ token }) {
             }
 
             const draftId = `drafts.${baseId}`;
+            const existingDoc = await client.getDocument(draftId) || await client.getDocument(baseId);
+            const assetFields = [
+              'assetRid',
+              'assetType',
+              'assetTitle',
+              'assetDescription',
+              'assetNotes',
+              'assetRelatedLinkText',
+              'assetRelatedLinkUrl',
+              'assetUploaded',
+              'assetReferenceId',
+              '_id',
+              '_type',
+            ];
+
             const assetData = {
               _id: draftId,
               _type: 'cincopa.asset',
@@ -47,9 +62,20 @@ export function createSyncAssetData({ token }) {
               assetReferenceId: asset.reference_id,
             }
 
+            const preservedFields = Object.fromEntries(
+              Object.entries(existingDoc || {}).filter(([key]) => !assetFields.includes(key))
+            );
+
+            const mergedData = {
+              _id: draftId,
+              _type: 'cincopa.asset',
+              ...assetData,
+              ...preservedFields,
+            };
+
             try {
-              await client.createIfNotExists({ _id: draftId, _type: assetData._type });
-              await client.patch(draftId).set(assetData).commit();
+              await client.createIfNotExists({ _id: draftId, _type: 'cincopa.asset' });
+              await client.patch(draftId).set(mergedData).commit();
             } catch (error) {
                 console.error('Failed to update document:', error);
             }

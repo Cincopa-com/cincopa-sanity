@@ -7,7 +7,7 @@ const defaultConfig = {};
 
 export const cincopaUploader = definePlugin((userConfig = {}) => {
   const config = { ...defaultConfig, ...userConfig };
-  const customFields = config.cincopaAssetCustomFields.fields;
+  const customFields = config?.cincopaAssetCustomFields?.fields || [];
   const finalSchemaTypes = schemaTypes.map((type) => {
     if (type.name === 'cincopa.asset') {
       return {
