@@ -30,6 +30,25 @@ npm install sanity-plugin-cincopa-uploader@latest
 
 ---
 
+## 🛠 Token Configuration
+
+Create a .env file in the root of your Sanity Studio (if you don't already have one) and add the following:
+
+```ts
+SANITY_STUDIO_CINCOPA_API_TOKEN=YOUR_CINCOPA_FULL_ACCESS_TOKEN
+SANITY_STUDIO_CINCOPA_API_TOKEN_EDITOR=YOUR_CINCOPA_VIEWER_ACCESS_TOKEN
+```
+
+- SANITY_STUDIO_CINCOPA_API_TOKEN is required for uploading and managing assets (Full Access).
+
+- SANITY_STUDIO_CINCOPA_API_TOKEN_EDITOR is an optional token used for read-only access (Viewer).
+
+Restart the server after saving changes:
+
+```bash
+npm run dev
+```
+
 ## 🚀 Usage
 
 ### 1. Configure the plugin in `sanity.config.ts` (or `.js`):
