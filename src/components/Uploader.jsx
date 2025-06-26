@@ -1,4 +1,4 @@
-import { Card, Flex, Grid, Inline, Box, Heading, Text, Label, Button, Popover, Menu, MenuItem, MenuDivider, useClickOutsideEvent } from '@sanity/ui'
+import { Card, Flex, Grid, Inline, Box, Heading, Text, Label, Button, Popover, Menu, MenuItem, MenuDivider, useClickOutside } from '@sanity/ui'
 import {SearchIcon, EllipsisVerticalIcon, ResetIcon, UploadIcon} from '@sanity/icons'
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { useClient } from '../hooks/useClient'
@@ -138,7 +138,7 @@ function Uploader(props) {
         }
     }, [props?.dialogState, openMenu])
 
-    useClickOutsideEvent(
+    useClickOutside(
         () => setOpenMenu(false),
         () => [menuElement]
     );
