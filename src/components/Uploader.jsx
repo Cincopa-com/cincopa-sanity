@@ -138,10 +138,13 @@ function Uploader(props) {
         }
     }, [props?.dialogState, openMenu])
 
-    useClickOutside(
-        () => setOpenMenu(false),
-        () => [menuElement]
-    );
+    const handleClickOutside = useCallback(() => {
+        if (openMenu) {
+            setOpenMenu(false);
+        }
+    }, [openMenu]);
+
+    useClickOutside(handleClickOutside, [menuElement]);
 
     return(
         <>
