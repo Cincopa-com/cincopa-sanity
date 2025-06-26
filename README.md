@@ -58,7 +58,10 @@ import { defineConfig } from 'sanity'
 import { cincopaUploader } from 'sanity-plugin-cincopa-uploader'
 
 export default defineConfig({
-  plugins: [cincopaUploader()],
+  plugins: [cincopaUploader({
+    token: process.env.SANITY_STUDIO_CINCOPA_API_TOKEN,
+    token_viewer: process.env.SANITY_STUDIO_CINCOPA_API_TOKEN_EDITOR,
+  })],
 })
 ```
 
@@ -105,6 +108,8 @@ import { cincopaAssetCustomFields } from './schemaTypes/cincopaAssetCustomFields
 export default defineConfig({
   plugins: [
     cincopaUploader({
+      token: process.env.SANITY_STUDIO_CINCOPA_API_TOKEN,
+      token_viewer: process.env.SANITY_STUDIO_CINCOPA_API_TOKEN_EDITOR,
       cincopaAssetCustomFields,
     }),
   ],
