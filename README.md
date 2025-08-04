@@ -1,19 +1,29 @@
 # 🎞️ Sanity Plugin: Cincopa Uploader
 
-A Sanity Studio v3 plugin for uploading and managing assets with [Cincopa](https://www.cincopa.com/).
+A Sanity Studio v3 plugin for uploading and managing video assets with [Cincopa Video Platform](https://www.cincopa.com).
 
-This plugin allows editors to upload media files or link existing Cincopa assets directly from within the Sanity Studio interface.
+This plugin enables editors to seamlessly upload and manage videos directly within the Sanity Studio interface.
 
 ---
 
 ## ✨ Features
 
-- 📤 Upload media to Cincopa from within Sanity (via file or URL)
-- 🔍 Search assets by **title** or **Cincopa Asset ID**
-- 🔗 Store and display uploaded asset metadata
-- 🔐 Uses your Cincopa API Token for secure access
+- 📤 Upload videos to Cincopa from within Sanity
+- 🔍 Search your video library by title, description, ID, or even within the transcript
+- 🧠 Set or auto-generate title and description with AI
+- 🖼️ Pick or upload a thumbnail, or define a video clip as your preview
+- 🎬 Create or auto-generate chapters to divide a long video
+- 📝 Create, upload, or generate subtitles with AI
+- 🎯 Add on-video features like annotations, calls to action, lead capture forms
+- 📊 Dive into layered insights with our three-level analytics
+- ✂️ Cut, trim, and refine your video content
+
 
 ---
+
+<p><img width="623" alt="" src="https://github.com/Cincopa-com/cincopa-sanity/assets/cm-cincopa-sanity.png"></p>
+
+<p><img width="623" alt="" src="https://github.com/Cincopa-com/cincopa-sanity/assets/sn-cincopa-sanity.png"></p>
 
 ## 🛠 Installation
 
