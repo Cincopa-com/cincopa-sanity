@@ -21,9 +21,9 @@ This plugin enables editors to seamlessly upload and manage videos directly with
 
 ---
 
-<p><img width="623" alt="" src="https://github.com/Cincopa-com/cincopa-sanity/blob/cb98748f86049ba61b5ce3cd850530c9355c6fca/assets/cm-cincopa-sanity.png"></p>
+<p><img width="623" alt="" src="https://raw.githubusercontent.com/Cincopa-com/cincopa-sanity/main/assets/cm-cincopa-sanity.png"></p>
 
-<p><img width="623" alt="" src="https://github.com/Cincopa-com/cincopa-sanity/blob/cb98748f86049ba61b5ce3cd850530c9355c6fca/assets/sn-cincopa-sanity.png"></p>
+<p><img width="623" alt="" src="https://raw.githubusercontent.com/Cincopa-com/cincopa-sanity/main/assets/sn-cincopa-sanity.png"></p>
 
 ## 🛠 Installation
 
