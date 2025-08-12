@@ -8,15 +8,18 @@ This plugin enables editors to seamlessly upload and manage videos directly with
 
 ## ✨ Features
 
-- 📤 Upload videos to Cincopa from within Sanity
-- 🔍 Search your video library by title, description, ID, or even within the transcript
-- 🧠 Set or auto-generate title and description with AI
-- 🖼️ Pick or upload a thumbnail, or define a video clip as your preview
-- 🎬 Create or auto-generate chapters to divide a long video
-- 📝 Create, upload, or generate subtitles with AI
-- 🎯 Add on-video features like annotations, calls to action, lead capture forms
-- 📊 Dive into layered insights with our three-level analytics
-- ✂️ Cut, trim, and refine your video content
+📤 **Upload** videos to Cincopa from within Sanity
+🎥 Use our customizable, **video players** (mobile and desktop) - available in **multiple styles** such as playlists, Netflix-like galleries, academy and course layouts with multiple playlists, and more
+⚡ Deliver content through a top-tier **global CDN** for maximum speed and reliability
+📊 **Analytics**: Dive into layered insights with our three-level analytics
+📝 Create, upload, or generate **subtitles/CC** with AI
+🎬 Create or auto-generate **chapters** to divide a long video
+🎯 Add **on-video features** like annotations, calls to action, lead capture forms
+🔍 **Search** your video library by title, description, ID, or even within the transcript
+🧠 Set or auto-generate title and description **with AI**
+🖼️ Pick or upload a **thumbnail**, or define a video clip as your preview
+🌐 Automatic **Video SEO** with structured JSON-LD markup
+✂️ Cut, **trim**, and refine your video content
 
 
 ---
