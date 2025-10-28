@@ -11,6 +11,7 @@ This plugin enables editors to seamlessly upload and manage videos directly with
 - 📤 **Upload** videos to Cincopa from within Sanity
 - 🎥 Use our customizable, **video players** (mobile and desktop) - available in **multiple styles** such as playlists, Netflix-like galleries, academy and course layouts with multiple playlists, and more
 - ⚡ Deliver content through a top-tier **global CDN** for maximum speed and reliability
+- 🔒 **Enterprise-grade security** - protect your videos with AES encryption, domain and IP restrictions, and expiring embed tokens.
 - 📊 **Analytics**: Dive into layered insights with our three-level analytics
 - 📝 Create, upload, or generate **subtitles/CC** with AI
 - 🎬 Create or auto-generate **chapters** to divide a long video
@@ -20,6 +21,7 @@ This plugin enables editors to seamlessly upload and manage videos directly with
 - 🖼️ Pick or upload a **thumbnail**, or define a video clip as your preview
 - 🌐 Automatic **Video SEO** with structured JSON-LD markup
 - ✂️ Cut, **trim**, and refine your video content
+- 🧩 **API access** - integrate Cincopa with your apps, automate workflows, or build fully custom video experiences.
 ---
 
 <p><img width="623" alt="" src="https://raw.githubusercontent.com/Cincopa-com/cincopa-sanity/main/assets/cm-cincopa-sanity.png"></p>
