@@ -60,7 +60,11 @@ export function UseCincopaInput(props) {
   }
 
   const getAssetFid = (type, defaultsFid) => {
-    return defaultsFid[type] || 'A4HAcLOLOO68';
+    let assetType = type;
+    if(assetType == 'music'){
+      assetType = 'audio';
+    }
+    return defaultsFid[assetType] || 'A4HAcLOLOO68';
   }
 
 return (
